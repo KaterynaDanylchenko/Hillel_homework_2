@@ -1,4 +1,5 @@
 from random import randint
+import timeit
 
 
 def get_random_number():
@@ -15,18 +16,13 @@ def get_number_from_user():
     Returns:
         (int)
     """
-    max_attempts = 3
-    available_attempts = 0
-    if available_attempts <= max_attempts:
-        available_attempts+1
-        print(available_attempts)
-        while True:
-            try:
-                return int(input(f'Enter int, but remember that you have {max_attempts} attempts: '))
-            except:
-                print('It\'s not int')
-            else:
-                print("You don't have available attempts")
+    while True:
+        try:
+            return int(input(f'Enter int, but remember that you have 3 attempts: '))
+        except:
+            print('It\'s not int')
+        else:
+            print("You don't have available attempts")
 
 
 def check_numbers(to_guess, user_number):
@@ -53,19 +49,38 @@ def check_numbers(to_guess, user_number):
         print('Its so cold')
         return False
     elif to_guess == user_number:
-        print('return True')
         return True
 
 
 def game():
-    number_to_guess = get_random_number()
-
-    while True:
-        user_number = get_number_from_user()
-        if check_numbers(number_to_guess, user_number):
+    """This function takes user and computer values and compares them. Allows the user to make three attempts to
+    enter """
+    a = get_random_number()
+    for i in range(1, 4):
+        b = get_number_from_user()
+        if check_numbers(a, b) is True:
+            print('You WIN!!!!')
             break
-
-    print('You WIN!!!!')
 
 
 game()
+
+
+def time_func():
+    """This function measures the running time in seconds of the game"""
+    game_time = timeit.timeit()
+    return game_time
+
+
+#
+def decorator(func):
+    """This decorator contains a message about the game time in seconds"""
+
+    def user_notification():
+        print(f'Часи виконання гри {func()} секунд')
+
+    return user_notification
+
+
+d = decorator(time_func)
+d()
